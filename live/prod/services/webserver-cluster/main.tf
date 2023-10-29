@@ -7,36 +7,19 @@ module "webserver_cluster" {
   cluster_name = "webservers-prod"
   db_remote_address = data.terraform_remote_state.db.outputs.address
   db_remote_port = data.terraform_remote_state.db.outputs.port
+  ami = "ami-024e6efaf93d85776"
+  server_text = "This is Production environment"
   instance_type = "t2.medium"
   min_size = 2
   max_size = 10
-
+  enable_autoscaling = true
   custom_tags = {
     Owner = "team-prem"
     ManagedBy = "terraform"
   }
 }
 
-resource "aws_autoscaling_schedule" "scale_out_during_business_hours" {
-  scheduled_action_name = "scale_out_during_business_hours"
-  min_size = 2
-  max_size = 10
-  desired_capacity = 10
-  recurrence = "0 9 * * *"
 
-  autoscaling_group_name = module.webserver_cluster.asg_name
-}
-
-resource "aws_autoscaling_schedule" "scale_in_at_off_business_hours" {
-  scheduled_action_name = "scale_in_at_off_business_hours"
-  min_size = 2
-  max_size = 10
-  desired_capacity = 2
-  recurrence = "0 17 * * *"
-
-  autoscaling_group_name = module.webserver_cluster.asg_name
-  
-}
 
 data "terraform_remote_state" "db" {
   backend = "s3"
