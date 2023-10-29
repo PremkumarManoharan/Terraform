@@ -3,6 +3,6 @@ provider "aws" {
 }
 
 resource "aws_iam_user" "iam_user" {
-  count = length(var.developers)
-  name = var.developers[count.index]
+  for_each = toset(var.developers)
+  name = each.value
 }

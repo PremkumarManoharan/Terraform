@@ -3,13 +3,18 @@ provider "aws" {
 }
 
 module "webserver_cluster" {
-  source = "../../../modules/services/webserver-cluster"
+  source = "/Users/premkumarmanoharan/Documents/Projects/Terraform/Terraform-Modules/services/webserver-cluster"
   cluster_name = "webservers-prod"
   db_remote_address = data.terraform_remote_state.db.outputs.address
   db_remote_port = data.terraform_remote_state.db.outputs.port
   instance_type = "t2.medium"
   min_size = 2
   max_size = 10
+
+  custom_tags = {
+    Owner = "team-prem"
+    ManagedBy = "terraform"
+  }
 }
 
 resource "aws_autoscaling_schedule" "scale_out_during_business_hours" {

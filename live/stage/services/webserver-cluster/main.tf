@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 module "webserver_cluster" {
-  source = "github.com/PremkumarManoharan/Terraform-Modules//services/webserver-cluster?ref=v0.0.1"
+  source = "../../../modules/services/webserver-cluster"
   cluster_name = "webservers-stage"
   db_remote_address = data.terraform_remote_state.db.outputs.address
   db_remote_port = data.terraform_remote_state.db.outputs.port
